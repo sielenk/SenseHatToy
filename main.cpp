@@ -53,6 +53,8 @@ class Map {
     if (m_ptr == MAP_FAILED) {
       throw std::runtime_error(strerror(errno));
     }
+
+    memset(m_ptr, 0, m_fb.getScreenSize());
   }
   ~Map() { munmap(m_ptr, m_fb.getScreenSize()); }
 
@@ -81,6 +83,13 @@ int main(int argc, char* argv[]) {
   map.pixel(x, y) = -1;
 
   while (event.read(reinterpret_cast<char*>(&ev), sizeof(ev))) {
+    while (xt == x && yt == y) {
+      xt = rand();
+      yt = rand();
+
+      map.adjust(xt, yt);
+      map.pixel(xt, yt) = 0xf000;
+    }
 
     if (ev.type == EV_KEY && ev.value != 0) {
       map.pixel(x, y) = 0;
@@ -106,14 +115,6 @@ int main(int argc, char* argv[]) {
       map.adjust(x, y);
       map.pixel(x, y) = color;
 
-    }
-
-    if (xt == x && yt == y) {
-      xt = rand();
-      yt = rand();
-
-      map.adjust(xt, yt);
-      map.pixel(xt, yt) = -1;
     }
   }
 
