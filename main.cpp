@@ -75,11 +75,13 @@ int main(int argc, char* argv[]) {
                       std::ifstream::in | std::ifstream::binary);
   input_event ev;
   int x(0), y(0);
+  int xt(0), yt(0);
   unsigned short color(-1);
 
   map.pixel(x, y) = -1;
 
   while (event.read(reinterpret_cast<char*>(&ev), sizeof(ev))) {
+
     if (ev.type == EV_KEY && ev.value != 0) {
       map.pixel(x, y) = 0;
 
@@ -103,6 +105,15 @@ int main(int argc, char* argv[]) {
 
       map.adjust(x, y);
       map.pixel(x, y) = color;
+
+    }
+
+    if (xt == x && yt == y) {
+      xt = rand();
+      yt = rand();
+
+      map.adjust(xt, yt);
+      map.pixel(xt, yt) = -1;
     }
   }
 
