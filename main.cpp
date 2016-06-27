@@ -48,8 +48,8 @@ class Map {
   Map()
       : m_fb(),
         m_ptr(static_cast<char*>(mmap(nullptr, m_fb.getScreenSize(),
-                                      PROT_READ | PROT_WRITE,
-                                      MAP_SHARED, m_fb.getFd(), 0))) {
+                                      PROT_READ | PROT_WRITE, MAP_SHARED,
+                                      m_fb.getFd(), 0))) {
     if (m_ptr == MAP_FAILED) {
       throw std::runtime_error(strerror(errno));
     }
@@ -61,15 +61,13 @@ class Map {
   int adjust(int& x, int& y) const { m_fb.adjust(x, y); }
 
   unsigned short& pixel(int x, int y) {
-    return reinterpret_cast<unsigned short&>(
-        m_ptr[m_fb.getLocation(x, y)]);
+    return reinterpret_cast<unsigned short&>(m_ptr[m_fb.getLocation(x, y)]);
   }
 
  private:
   Fb m_fb;
   char* m_ptr;
 };
-
 
 int main(int argc, char* argv[]) {
   Map map;
