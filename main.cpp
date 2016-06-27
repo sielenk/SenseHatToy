@@ -83,11 +83,14 @@ int main(int argc, char* argv[]) {
   map.pixel(x, y) = -1;
 
   while (event.read(reinterpret_cast<char*>(&ev), sizeof(ev))) {
-    while (xt == x && yt == y) {
-      xt = rand();
-      yt = rand();
+    if (xt == x && yt == y) {
+      do {
+        xt = rand();
+        yt = rand();
 
-      map.adjust(xt, yt);
+        map.adjust(xt, yt);
+      } while (xt == x && yt == y);
+
       map.pixel(xt, yt) = 0xf000;
     }
 
@@ -114,7 +117,6 @@ int main(int argc, char* argv[]) {
 
       map.adjust(x, y);
       map.pixel(x, y) = color;
-
     }
   }
 
